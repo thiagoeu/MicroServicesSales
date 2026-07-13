@@ -1,0 +1,52 @@
+version: '3.8'
+services:
+  auth-db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: auth_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_auth:/var/lib/postgresql/data
+  product-db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: product_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_product:/var/lib/postgresql/data
+  inventory-db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: inventory_db
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_inventory:/var/lib/postgresql/data
+  order-db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: order_db
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres_order:/var/lib/postgresql/data
+  rabbitmq:
+    image: rabbitmq:4.0-management-alpine
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+volumes:
+  postgres_auth:
+  postgres_product:
+  postgres_inventory:
+  postgres_order:
