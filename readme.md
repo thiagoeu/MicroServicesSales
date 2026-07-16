@@ -136,8 +136,6 @@ Entregar o **caminho feliz** completo de uma compra:
 
 ## 📁 Estrutura do Projeto
 
-## 📁 Estrutura do Projeto
-
 ```text
 commerce-hub-mvp/
 ├── apps/                                   # Aplicações
@@ -285,10 +283,10 @@ O Turborepo iniciará todos os serviços e o frontend simultaneamente.
 | API Gateway       | http://localhost:3000                  |
 | RabbitMQ Manager  | http://localhost:15672 _(guest/guest)_ |
 | Auth Service      | http://localhost:3001                  |
-| Product Service   | http://localhost:3002                  |
-| Inventory Service | http://localhost:3003                  |
-| Order Service     | http://localhost:3004                  |
-| Payment Service   | http://localhost:3005                  |
+| Product Service   | http://localhost:3005                  |
+| Inventory Service | http://localhost:3002                  |
+| Order Service     | http://localhost:3003                  |
+| Payment Service   | http://localhost:3004                  |
 
 ---
 
