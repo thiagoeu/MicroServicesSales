@@ -23,6 +23,19 @@ export class UsersService {
     }
   }
 
+  async findById(id: number) {
+    try {
+      return await this.prisma.client.user.findUnique({
+        where: { id },
+      });
+    } catch (error) {
+      console.error('Erro ao buscar usuário por id:', error);
+      throw new InternalServerErrorException(
+        'Erro ao acessar o banco de dados',
+      );
+    }
+  }
+
   async create(email: string, password: string, name: string) {
     const existingUser = await this.findByEmail(email);
 

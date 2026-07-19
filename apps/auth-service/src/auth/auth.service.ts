@@ -38,4 +38,18 @@ export class AuthService {
     const user = await this.usersService.create(email, password, name);
     return user;
   }
+
+  async refresh(refreshToken: string) {
+    try {
+      const payload = this.jwtService.verify(refreshToken);
+      const user = await this.usersService.findById(payload.sub);
+      if (!user) throw new UnauthorizedException('Invalid refresh token');
+      const newPayload = { sub: user.id, email: user.email };
+      return {
+        accessToken: this.jwtService.sign(newPayload),
+      };
+    } catch {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+  }
 }
