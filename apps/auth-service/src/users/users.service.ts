@@ -1,4 +1,8 @@
-import { Injectable, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  ConflictException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 
@@ -8,24 +12,28 @@ export class UsersService {
 
   async findByEmail(email: string) {
     try {
-      return this.prisma.client.user.findUnique({
+      return await this.prisma.client.user.findUnique({
         where: { email },
       });
     } catch (error) {
-      throw new ConflictException('Email already registered');
+      console.error('Erro ao buscar usuário por email:', error);
+      throw new InternalServerErrorException(
+        'Erro ao acessar o banco de dados',
+      );
     }
   }
 
   async create(email: string, password: string, name: string) {
-    try {
-      const existingUser = await this.findByEmail(email);
-      if (existingUser) {
-        throw new ConflictException('Email already registered');
-      }
+    const existingUser = await this.findByEmail(email);
 
+    if (existingUser) {
+      throw new ConflictException('Email já cadastrado!');
+    }
+
+    try {
       const hashedPassword = await bcrypt.hash(password, 10);
 
-      return this.prisma.client.user.create({
+      return await this.prisma.client.user.create({
         data: {
           email,
           password: hashedPassword,
@@ -33,7 +41,11 @@ export class UsersService {
         },
       });
     } catch (error) {
-      throw new ConflictException('Email already registered');
+      if (error.code === 'P2002') {
+        throw new ConflictException('Email already registered');
+      }
+      console.error('Erro ao criar usuário:', error);
+      throw new InternalServerErrorException('Erro ao criar usuário');
     }
   }
 }
