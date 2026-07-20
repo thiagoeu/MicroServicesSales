@@ -621,12 +621,22 @@ Authorization: Bearer <access_token>
 
 ```prisma
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  password  String   // Hashed
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  password  String    // Hashed
   name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  active    Boolean   @default(true)
+  role      UserRole  @default(CUSTOMER)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@map("tb_users")
+}
+
+enum UserRole {
+  ADMIN
+  SELLER
+  CUSTOMER
 }
 ```
 

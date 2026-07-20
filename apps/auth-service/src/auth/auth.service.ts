@@ -2,7 +2,8 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from '../users/users.service';
-
+import { User } from '@prisma/client';
+type PublicUser = Omit<User, 'password'>;
 @Injectable()
 export class AuthService {
   constructor(
@@ -10,7 +11,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(email: string, password: string) {
+  async validateUser(email: string, password: string): Promise<PublicUser> {
     const user = await this.usersService.findByEmail(email);
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
@@ -26,7 +27,7 @@ export class AuthService {
     return result;
   }
 
-  async login(user: any) {
+  async login(user: PublicUser) {
     const payload = { sub: user.id, email: user.email };
     return {
       accessToken: this.jwtService.sign(payload),
@@ -36,7 +37,7 @@ export class AuthService {
 
   async register(email: string, password: string, name: string) {
     const user = await this.usersService.create(email, password, name);
-    return user;
+    return this.sanitizeUser(user);
   }
 
   async refresh(refreshToken: string) {
@@ -51,5 +52,10 @@ export class AuthService {
     } catch {
       throw new UnauthorizedException('Invalid refresh token');
     }
+  }
+
+  async sanitizeUser(user: User): Promise<PublicUser> {
+    const { password, ...safeUser } = user;
+    return safeUser;
   }
 }
