@@ -8,11 +8,11 @@ const AUTH_SERVICE_HOST =
 const PRODUCT_SERVICE_HOST =
   process.env.PRODUCT_SERVICE_HOST ?? 'http://localhost:3002';
 const INVENTORY_SERVICE_HOST =
-  process.env.INVENTORY_SERVICE_HOST ?? 'http://localhost:3003';
+  process.env.INVENTORY_SERVICE_HOST ?? 'http://localhost:3005';
 const ORDER_SERVICE_HOST =
-  process.env.ORDER_SERVICE_HOST ?? 'http://localhost:3004';
+  process.env.ORDER_SERVICE_HOST ?? 'http://localhost:3003';
 const PAYMENT_SERVICE_HOST =
-  process.env.PAYMENT_SERVICE_HOST ?? 'http://localhost:3005';
+  process.env.PAYMENT_SERVICE_HOST ?? 'http://localhost:3004';
 
 const proxies: RequestHandler[] = [
   createProxyMiddleware({
